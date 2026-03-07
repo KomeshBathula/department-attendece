@@ -58,7 +58,7 @@ const ManualEntry = () => {
                 <button
                     type="submit"
                     disabled={loading || !rollNo}
-                    className="cursor-pointer w-full px-6 py-4 bg-primary text-white font-bold text-lg rounded-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
+                    className="cursor-pointer w-full px-6 py-4 bg-primary text-white font-bold text-lg rounded-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-primary/30 hover:shadow-primary/50"
                 >
                     {loading ? (
                         <span className="flex items-center justify-center gap-2">

@@ -216,7 +216,7 @@ const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom
                 {!isScanning && !scanResult && (
                     <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm text-slate-300 p-6 text-center transition-all duration-300">
                         {!scanError && (
-                            <div className="mb-4 p-4 bg-white/5 rounded-full border border-white/10 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
+                            <div className="mb-4 p-4 bg-white/5 rounded-full border border-white/10 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
                                 <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
                             </div>
                         )}
@@ -226,7 +226,7 @@ const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom
                                 <h3 className="text-white text-xl font-bold mb-1 tracking-tight">Ready to Scan</h3>
                                 <button
                                     onClick={() => startScanning()}
-                                    className="cursor-pointer mt-6 px-8 py-3 bg-primary text-white font-bold rounded-full shadow-[0_0_20px_rgba(59,130,246,0.6)] hover:shadow-[0_0_25px_rgba(59,130,246,0.8)] hover:scale-105 transition transform flex items-center gap-2"
+                                    className="cursor-pointer mt-6 px-8 py-3 bg-primary text-white font-bold rounded-full shadow-[0_0_20px_rgba(139,92,246,0.6)] hover:shadow-[0_0_25px_rgba(139,92,246,0.8)] hover:scale-105 transition transform flex items-center gap-2"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                     Start Camera
@@ -273,11 +273,11 @@ const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom
             <div className="w-full">
                 {isProcessing && !scanResult && (
                     <div className="w-full animate-pulse mb-4">
-                        <div className="glass-card rounded-2xl p-6 shadow-xl flex flex-col items-center text-center border border-cyan-500/30">
-                            <div className="w-10 h-10 border-3 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin mb-3"></div>
-                            <h3 className="text-cyan-400 font-bold">{currentMsg}</h3>
+                        <div className="glass-card rounded-2xl p-6 shadow-xl flex flex-col items-center text-center border border-primary/30">
+                            <div className="w-10 h-10 border-3 border-primary/30 border-t-primary rounded-full animate-spin mb-3"></div>
+                            <h3 className="text-primary font-bold">{currentMsg}</h3>
                             {queueDepth > 1 && (
-                                <p className="text-amber-400 text-[10px] font-bold uppercase mt-1">Queue Position: {queueDepth}</p>
+                                <p className="text-accent text-[10px] font-bold uppercase mt-1">Queue Position: {queueDepth}</p>
                             )}
                             <p className="text-slate-500 text-xs mt-1 italic">Please hold for a moment</p>
                         </div>
@@ -296,7 +296,7 @@ const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom
                                 <div className="mt-3 w-full bg-black/40 rounded-xl p-3 border border-white/5">
                                     <div className="text-xl font-bold text-white tracking-wide">{scanResult.student.name}</div>
                                     <div className="text-sm font-mono text-slate-400 mt-1">{scanResult.student.rollNo}</div>
-                                    <div className="text-xs text-indigo-300/80 mt-1 uppercase tracking-wider font-semibold">{scanResult.student.branch}</div>
+                                    <div className="text-xs text-primary/80 mt-1 uppercase tracking-wider font-semibold">{scanResult.student.branch}</div>
                                 </div>
                             )}
                             <div className="mt-2 text-xs text-slate-500">Scanned at {scanResult.timestamp}</div>

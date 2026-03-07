@@ -196,11 +196,11 @@ const AdminLogin = ({ onBack }) => {
         </button>
 
         <div className="flex flex-col items-center w-full max-w-4xl animate-fade-in-up">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 mb-6 rounded-full overflow-hidden bg-slate-900/80 border-[3px] border-cyan-500/40 p-1 shadow-[0_0_25px_rgba(34,211,238,0.3)] flex items-center justify-center transition-all hover:border-cyan-400 hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] group backdrop-blur-xl scale-95 sm:scale-100">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 mb-6 rounded-full overflow-hidden bg-slate-900/80 border-[3px] border-primary/40 p-1 shadow-[0_0_25px_rgba(139,92,246,0.3)] flex items-center justify-center transition-all hover:border-primary hover:shadow-[0_0_35px_rgba(139,92,246,0.5)] group backdrop-blur-xl scale-95 sm:scale-100">
             <img src="/logo.png" alt="Smart Attendance Logo" className="w-full h-full rounded-full object-cover drop-shadow-lg transition-transform group-hover:scale-110 duration-500" />
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 mb-8 drop-shadow-[0_0_10px_rgba(34,211,238,0.3)]">
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-rose-500 mb-8 drop-shadow-[0_0_10px_rgba(139,92,246,0.3)]">
             HOD Dashboard
           </h1>
 
@@ -213,13 +213,13 @@ const AdminLogin = ({ onBack }) => {
                 <span className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-1">Total</span>
                 <span className="text-3xl font-black text-white text-glow">{stats.total}</span>
               </div>
-              <div className="bg-green-500/5 rounded-2xl p-4 border border-green-500/10 text-center group hover:bg-green-500/10 transition-all">
-                <span className="text-xs font-bold text-green-500/60 uppercase tracking-widest block mb-1">Present</span>
-                <span className="text-3xl font-black text-green-400 text-glow">{stats.present}</span>
+              <div className="bg-success/5 rounded-2xl p-4 border border-success/10 text-center group hover:bg-success/10 transition-all">
+                <span className="text-xs font-bold text-success/60 uppercase tracking-widest block mb-1">Present</span>
+                <span className="text-3xl font-black text-success text-glow">{stats.present}</span>
               </div>
-              <div className="bg-red-500/5 rounded-2xl p-4 border border-red-500/10 text-center group hover:bg-red-500/10 transition-all">
-                <span className="text-xs font-bold text-red-500/60 uppercase tracking-widest block mb-1">Absent</span>
-                <span className="text-3xl font-black text-red-400 text-glow">{stats.absent}</span>
+              <div className="bg-danger/5 rounded-2xl p-4 border border-danger/10 text-center group hover:bg-danger/10 transition-all">
+                <span className="text-xs font-bold text-danger/60 uppercase tracking-widest block mb-1">Absent</span>
+                <span className="text-3xl font-black text-danger text-glow">{stats.absent}</span>
               </div>
             </div>
 
@@ -303,7 +303,7 @@ const AdminLogin = ({ onBack }) => {
               <button
                 onClick={handleExportPDF}
                 disabled={isExporting}
-                className={`w-full py-4 mt-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${isExporting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                className={`w-full py-4 mt-2 bg-gradient-to-r from-success to-emerald-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black rounded-xl shadow-lg shadow-success/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${isExporting ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
                 {isExporting ? (
                   <>
@@ -341,13 +341,13 @@ const AdminLogin = ({ onBack }) => {
 
       {/* Main Content */}
       <div className="flex flex-col items-center w-full max-w-md animate-fade-in-up">
-        <div className="w-32 h-32 sm:w-40 sm:h-40 mb-8 rounded-full overflow-hidden bg-slate-900/80 border-[4px] border-cyan-500/50 p-1.5 shadow-[0_0_40px_rgba(34,211,238,0.4)] flex items-center justify-center transition-all hover:border-cyan-300 hover:shadow-[0_0_50px_rgba(34,211,238,0.6)] group backdrop-blur-3xl scale-100 glow-border">
+        <div className="w-32 h-32 sm:w-40 sm:h-40 mb-8 rounded-full overflow-hidden bg-slate-900/80 border-[4px] border-primary/50 p-1.5 shadow-[0_0_40px_rgba(139,92,246,0.4)] flex items-center justify-center transition-all hover:border-primary hover:shadow-[0_0_50px_rgba(139,92,246,0.6)] group backdrop-blur-3xl scale-100 glow-border">
           <img src="/logo.png" alt="Smart Attendance Logo" className="w-full h-full rounded-full object-cover drop-shadow-2xl transition-transform group-hover:scale-110 duration-500" />
         </div>
 
         {/* Heading container */}
         <div className="text-center mb-10 w-full px-4">
-          <h1 className="text-4xl sm:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 mb-4 drop-shadow-[0_0_15px_rgba(34,211,238,0.4)] px-2">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-rose-500 mb-4 drop-shadow-[0_0_15px_rgba(139,92,246,0.4)] px-2">
             Admin Portal Authentication
           </h1>
           <div className="flex items-center justify-center gap-2 text-slate-400 font-medium">
@@ -378,7 +378,7 @@ const AdminLogin = ({ onBack }) => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full py-4 mt-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black rounded-xl shadow-lg shadow-cyan-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className={`w-full py-4 mt-4 bg-gradient-to-r from-primary to-accent hover:from-primary hover:to-accent text-white font-black rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
               {loading ? (
                 <>

@@ -91,17 +91,17 @@ const AttendanceList = () => {
         <div className="w-full max-w-4xl mx-auto animate-fade-in-up">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                <div className="glass-card p-4 rounded-xl border border-white/5 bg-white/5">
+                <div className="glass-card p-4 rounded-xl border border-white/5 bg-white/5 shadow-[0_0_20px_rgba(255,255,255,0.02)]">
                     <div className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Total Students</div>
                     <div className="text-3xl font-black text-white">{stats.total.toLocaleString()}</div>
                 </div>
-                <div className="glass-card p-4 rounded-xl border border-green-500/10 bg-green-500/5">
-                    <div className="text-green-400/70 text-xs font-bold uppercase tracking-wider mb-1">Present</div>
-                    <div className="text-3xl font-black text-green-400">{stats.present.toLocaleString()}</div>
+                <div className="glass-card p-4 rounded-xl border border-success/10 bg-success/5 shadow-[0_0_20px_rgba(16,185,129,0.05)]">
+                    <div className="text-success text-xs font-bold uppercase tracking-wider mb-1">Present</div>
+                    <div className="text-3xl font-black text-success">{stats.present.toLocaleString()}</div>
                 </div>
-                <div className="glass-card p-4 rounded-xl border border-white/5 bg-white/2">
-                    <div className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Pending</div>
-                    <div className="text-3xl font-black text-slate-400">{stats.absent.toLocaleString()}</div>
+                <div className="glass-card p-4 rounded-xl border border-primary/10 bg-primary/5 shadow-[0_0_20px_rgba(139,92,246,0.05)]">
+                    <div className="text-primary text-xs font-bold uppercase tracking-wider mb-1 text-primary/80">Pending</div>
+                    <div className="text-3xl font-black text-primary/90">{stats.absent.toLocaleString()}</div>
                 </div>
             </div>
 
@@ -124,7 +124,7 @@ const AttendanceList = () => {
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                     <button
                         onClick={handleExport}
-                        className="cursor-pointer flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-green-600/90 hover:bg-green-500 text-white font-bold rounded-xl shadow-lg hover:shadow-green-500/20 transition-all active:scale-95 text-sm"
+                        className="cursor-pointer flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all active:scale-95 text-sm"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         Export CSV
@@ -152,7 +152,7 @@ const AttendanceList = () => {
                                     key={idx}
                                     className="hover:bg-white/5 transition-colors group"
                                 >
-                                    <td className="p-4 text-white font-medium group-hover:text-cyan-400 transition-colors">{student.name}</td>
+                                    <td className="p-4 text-white font-medium group-hover:text-primary transition-colors">{student.name}</td>
                                     <td className="p-4 text-slate-400 font-mono text-xs">{student.rollNo}</td>
                                     <td className="p-4 text-slate-500 uppercase text-[10px] font-black tracking-wider">{student.branch}</td>
                                     <td className="p-4 text-center">
@@ -187,7 +187,7 @@ const AttendanceList = () => {
                 {searchTerm && (
                     <button
                         onClick={() => setSearchTerm('')}
-                        className="text-[10px] text-cyan-500 font-bold uppercase tracking-widest hover:text-cyan-400 underline underline-offset-4"
+                        className="text-[10px] text-primary font-bold uppercase tracking-widest hover:text-accent underline underline-offset-4"
                     >
                         Clear Filter
                     </button>
