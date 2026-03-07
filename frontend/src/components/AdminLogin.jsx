@@ -75,7 +75,8 @@ const AdminLogin = ({ onBack }) => {
   // Remove auto-branch logic as it's now dynamic semester based
 
   const handleExportPDF = async () => {
-    if (!selectedSemester || !selectedBranch) {
+    // Only require Semester and Branch if we are NOT doing a global "Present Only" export
+    if (selectedStatus !== 'Present' && (!selectedSemester || !selectedBranch)) {
       setExportMessage('Please select both Semester and Branch to export.');
       return;
     }
@@ -86,24 +87,22 @@ const AdminLogin = ({ onBack }) => {
       const data = await getAttendance();
       const students = data.students || [];
 
-      // Case-insensitive filtering
+      // Flexible filtering: apply filters only if they are selected
       const filtered = students.filter(s => {
         const sSem = (s.semester || '').trim().toLowerCase();
         const sBranch = (s.branch || '').trim().toLowerCase();
         const fSem = selectedSemester.toLowerCase();
         const fBranch = selectedBranch.toLowerCase();
 
-        let match = (sSem === fSem && sBranch === fBranch);
+        // 1. Status Filter (Primary)
+        if (selectedStatus === 'Present' && !s.isPresent) return false;
+        if (selectedStatus === 'Absent' && s.isPresent) return false;
 
-        if (!match) return false;
+        // 2. Semester/Branch Filters (Optional if Status is 'Present')
+        if (fSem && sSem !== fSem) return false;
+        if (fBranch && sBranch !== fBranch) return false;
 
-        if (selectedStatus === 'Present') {
-          return s.isPresent === true;
-        } else if (selectedStatus === 'Absent') {
-          return s.isPresent === false;
-        }
-
-        return true; // "All" selected
+        return true;
       });
 
       // Sort natural alphanumeric by rollNo
@@ -114,13 +113,17 @@ const AdminLogin = ({ onBack }) => {
       });
 
       if (filtered.length === 0) {
-        setExportMessage("No students registered for this filter");
+        setExportMessage("No students found matching these criteria");
         setIsExporting(false);
         return;
       }
 
       const doc = new jsPDF();
-      doc.text(`Attendance Report - ${selectedSemester} - ${selectedBranch}`, 14, 15);
+      const reportTitle = selectedStatus === 'Present' && (!selectedSemester || !selectedBranch)
+        ? "Total Workshop Attendance - All Departments"
+        : `Attendance Report - ${selectedSemester || 'All Sem'} - ${selectedBranch || 'All Branch'}`;
+
+      doc.text(reportTitle, 14, 15);
 
       const tableColumn = ["Roll No", "Name", "Branch", "Semester", "Status"];
       const tableRows = [];
@@ -142,10 +145,18 @@ const AdminLogin = ({ onBack }) => {
         startY: 20,
       });
 
-      const statusSuffix = selectedStatus !== 'All' ? `_${selectedStatus}` : '';
-      const fileName = `${selectedBranch}_${selectedSemester}${statusSuffix}_Attendance.pdf`;
-      doc.save(fileName);
+      // Special Filename for Global "Present" list
+      let fileName = "";
+      if (selectedStatus === 'Present' && (!selectedSemester || !selectedBranch)) {
+        fileName = "workshop_attended_allBranches.pdf";
+      } else {
+        const statusSuffix = selectedStatus !== 'All' ? `_${selectedStatus}` : '';
+        const branchPrefix = selectedBranch || 'AllBranch';
+        const semPrefix = selectedSemester || 'AllSem';
+        fileName = `${branchPrefix}_${semPrefix}${statusSuffix}_Attendance.pdf`;
+      }
 
+      doc.save(fileName);
       setExportMessage(`Successfully exported ${filtered.length} students`);
     } catch (err) {
       setExportMessage("Error exporting data: " + err.message);
