@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { markAttendance } from '../services/api';
 import scannerService from '../services/scannerService';
+import { addToOfflineQueue, getOfflineQueue, removeFromQueue } from '../services/offlineQueue';
 
 const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom" }) => {
     const [scanResult, setScanResult] = useState(null);
@@ -12,6 +13,13 @@ const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom
     const [currentMsg, setCurrentMsg] = useState("Syncing with Cloud...");
     const [queueDepth, setQueueDepth] = useState(0);
     const [retryCount, setRetryCount] = useState(0);
+    const [offlineCount, setOfflineCount] = useState(0);
+    const [syncNotification, setSyncNotification] = useState(null);
+
+    // Initial check for offline items on mount
+    useEffect(() => {
+        setOfflineCount(getOfflineQueue().length);
+    }, []);
 
     const PROFESSIONAL_MSGS = [
         "Syncing student record...",
@@ -44,6 +52,53 @@ const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom
             scannerService.clearSafe();
         };
     }, [autoStart, readerId]);
+
+    // Background sync effect
+    useEffect(() => {
+        let syncInterval;
+        
+        const syncOfflineData = async () => {
+            if (!navigator.onLine) return;
+            
+            const queue = getOfflineQueue();
+            if (queue.length === 0) return;
+            
+            setOfflineCount(queue.length);
+            
+            // Try to sync the oldest item
+            const item = queue[0];
+            try {
+                // Background sync attempt
+                await markAttendance(item.rollNo);
+                removeFromQueue(item.rollNo);
+                
+                const newCount = Math.max(0, queue.length - 1);
+                setOfflineCount(newCount);
+                
+                // Show a quick success toast
+                setSyncNotification(`Synced ${item.rollNo} to Cloud`);
+                setTimeout(() => setSyncNotification(null), 3000);
+            } catch (err) {
+                // If it's not a network error anymore (e.g. 400 bad request, meaning already registered or invalid), 
+                // we should remove it to prevent blocking the queue forever.
+                if (err.message !== "Connection Error" && !err.message.toLowerCase().includes("network")) {
+                    removeFromQueue(item.rollNo);
+                    setOfflineCount(prev => Math.max(0, prev - 1));
+                }
+            }
+        };
+
+        // Check for sync every 5 seconds
+        syncInterval = setInterval(syncOfflineData, 5000);
+        
+        // Also listen for online events to sync immediately
+        window.addEventListener('online', syncOfflineData);
+
+        return () => {
+            clearInterval(syncInterval);
+            window.removeEventListener('online', syncOfflineData);
+        };
+    }, []);
 
     const startScanning = useCallback(async (cameraIdToUse = null) => {
         setScanError(null);
@@ -177,10 +232,24 @@ const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom
                 return;
             }
 
-            setIsProcessing(false);
             // Professional Error Messaging
             let friendlyError = err.message;
-            if (err.message.toLowerCase().includes('server') || err.message.toLowerCase().includes('failed to fetch')) {
+            if (err.message.toLowerCase().includes('server') || err.message.toLowerCase().includes('failed to fetch') || err.message === "Connection Error") {
+                // Check if it's explicitly a connection issue
+                if (!navigator.onLine || err.message === "Connection Error" || err.message.toLowerCase().includes("network") || err.message.toLowerCase().includes('failed to fetch')) {
+                    addToOfflineQueue(rollNo);
+                    setOfflineCount(getOfflineQueue().length);
+                    if (navigator.vibrate) try { navigator.vibrate([50, 50, 50]); } catch (e) { }
+                    
+                    setScanResult({
+                        message: "Saved Offline",
+                        student: { name: "Pending Sync", rollNo: rollNo, branch: "Offline Mode" },
+                        timestamp: new Date().toLocaleTimeString()
+                    });
+                    setScanError(null);
+                    setIsProcessing(false);
+                    return;
+                }
                 friendlyError = "The system is currently handling multiple scans. Please wait 2 seconds and try again.";
             }
 
@@ -209,6 +278,21 @@ const Scanner = ({ onScanSuccess, onScan, autoStart = false, id = "reader-custom
             `}</style>
 
             <div className="relative w-full aspect-[4/5] bg-black rounded-3xl overflow-hidden shadow-2xl border border-slate-800">
+                
+                {offlineCount > 0 && (
+                    <div className="absolute top-4 left-4 z-40 bg-amber-500/90 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2 animate-pulse">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+                        {offlineCount} Pending Sync
+                    </div>
+                )}
+                
+                {syncNotification && (
+                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 bg-green-500/95 backdrop-blur-md text-white text-[10px] font-bold px-4 py-2 rounded-full shadow-xl flex items-center gap-2 animate-fade-in-up border border-green-400">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7"></path></svg>
+                        {syncNotification}
+                    </div>
+                )}
+
                 <div className="absolute inset-0 z-0 bg-black">
                     <div id={readerId} className="w-full h-full"></div>
                 </div>
